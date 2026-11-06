@@ -1,5 +1,94 @@
 ﻿@model IEnumerable<Zombie>
 
+@section Scripts {
+    <script>
+        document.querySelectorAll(".favorite").forEach(function(element) { // element = baliseA
+            element.addEventListener("click", function(){
+                let idZombie = element.getAttribute("id")
+
+                console.log(element)
+                console.log(idZombie)
+
+                fetch("/Zombie/Favorite", {
+                    method: 'POST',
+                    headers: {
+                        // Dit à ASP.NET qu'on envoie des données de formulaire classiques
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body : "id=" + idZombie
+                })
+                .then(function(answer) {
+                    return answer.json()
+                   
+                })
+                .then(function(data){
+                        console.log(data)
+                    if (data){
+                        element.classList.remove("text-dark")
+                        element.classList.add("text-primary")
+                    } else {
+                            element.classList.remove("text-primary")
+                            element.classList.add("text-dark")
+                    }
+                })
+
+
+            })
+        })
+
+        /* JQUARY
+        $(".favorite").on("click", function() {
+            let baliseA = $(this);      // Allez chercher l'élément <a> qui a été cliqué.
+            //console.log(baliseA);     // Validation qu'on obtient bien l'élément voulu. (Voir console navigateur)
+            let idZombie = baliseA.attr("id");   // Obtenir l'id en utilisant attr sur l'élément <a> cliqué
+            //console.log(idZombie);    // Validation
+            $.post("/Zombie/Favorite", { "id": idZombie }, // Construction de la requête post car on modifie les données
+                function(data) {
+                    //console.log(data);    // Validation
+                    if (data) {
+                        baliseA.removeClass("text-dark");
+                        baliseA.addClass("text-primary");
+                    } else {
+                        baliseA.removeClass("text-primary");
+                        baliseA.addClass("text-dark");
+                    }
+                });
+        });
+*/
+
+        document.querySelectorAll(".detail-btn").forEach(function(element) { // element = balise
+            element.addEventListener("click", function(event) {
+                event.preventDefault();
+                let idZombie = element.getAttribute("id")
+
+                fetch("/Zombie/Details?id=" + idZombie)
+                .then(function(answer){
+                    return answer.text()
+                })
+                .then(function(html){
+                        document.querySelector("#showmodal #content").innerHTML = html
+
+                        // Permet d’afficher le modal (Utilisation de la méthode native de Bootstrap en JS)
+                        let monModal = new bootstrap.Modal(document.getElementById('showmodal'))
+                        monModal.show()
+                })
+            })
+        })
+            /*JQUARY
+            $(".detail-btn").on("click", function() {
+            let btn = $(this);
+            let idZombie = btn.attr("id");
+            $.get("/Zombie/Details", { "id" : idZombie }, // Construction de la requête get
+               function (data) {
+                 $("#showmodal #content").html(data); // Insère data dans le div avec l’id content
+                 $("#showmodal").modal("show")        // Permet d’afficher le modal
+                });
+            });
+*/
+    </script>
+}
+
+
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-10">

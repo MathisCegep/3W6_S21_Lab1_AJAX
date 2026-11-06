@@ -4,6 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
+@section Scripts{
+    <script>
+        // JS
+        document.querySelectorAll("tr.WeaponList").forEach(function(element){
+            element.addEventListener("mouseenter", function() {
+                this.classList.add("highlight")
+            })
+            element.addEventListener("mouseleave", function() {
+                this.classList.remove("highlight")
+            })
+        })
+/* JQuary
+        $("tr.WeaponList")
+            .on("mouseenter", function() { $(this).addClass("highlight"); })
+            .on("mouseleave", function() { $(this).removeClass("highlight"); });
+*/
+    </script>
+}
+
 <h1>@Locals["Title"]</h1>
 
 <p>
